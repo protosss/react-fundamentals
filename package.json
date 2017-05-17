@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "production": "webpack -p",
-        "start": "webpack-dev-server"
+        "start": "webpack-dev-server --history-api-fallback"
     },
     "repository": {
         "type": "git",
@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "react": "^15.5.4",
-        "react-dom": "^15.5.4"
+        "react-dom": "^15.5.4",
+        "react-router": "^3.0.2"
     }
 }
