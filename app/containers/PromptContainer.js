@@ -1,31 +1,34 @@
 // app/containers/PromptContainer.js
 var React = require('react');
 var styles = require('../styles');
+var Prompt = require('../components/Prompt');
 
 var PromptContainer = React.createClass({
     contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: React.PropTypes.object.isRequired  // เป็นคำสั่งสำหรับ router ไป path อื่น ถ้าไม่ใส่จะทำการ router ไม่ได้
     },
-    getInitialState: function () {
+    getInitialState: function () { //เป็นการ Assign ค่าตัวแปร function นี้จะทำงานในครั้งแรกที่มีการใช้งาน Container เหมือน .net
+        //console.log('state');
         return {
-            username: ''
+            username: 'protosss'
         }
     },
-    onUpdateUser: function (event) {
+    handleUpdateUser: function (event) { //สร้าง Function กรณีที่มีการ Keyup ให้เรียก Function นี้
         //console.log(event.target)
         this.setState({
             username: event.target.value
         });
     },
-    onSubmitUser: function (e) {
-        e.preventDefault();
-        var username = this.state.username;
-        this.setState({
-            username: ''
+    handleSubmitUser: function (e) { //สร้าง Function ในการกดปุ่ม Submit 
+        e.preventDefault();  // ???? ในเว็บไม่ได้อธิบาย
+        var username = this.state.username; // สร้างตัวแปรเพื่อรับค่าจาก text input
+        this.setState({  // ทำการ Set ค่าของ username ใน State ให้เป็นค่าตามต้องการ ในเว็บจะให้ใส่เป็นค่าว่างคือเมื่อกดปุ่มไปหน้า playerTwo ช่อง input จะเป็นค่าว่าง
+            username: 'zpao'
         });
-
-        if (this.props.routeParams.playerOne) {
-            this.context.router.push({
+        //ตัวแปล var username กับ this.setState({ username : '' }) ไม่ใช่ตัวเดียวกัน
+        //console.log(username + ' xx ' + this.state.username);
+        if (this.props.routeParams.playerOne) { //เช็คว่ามีค่าหรือไม่
+            this.context.router.push({ // ทำการ router ไปยัง path /battle
                 pathname: '/battle',
                 query: {
                     playerOne: this.props.routeParams.playerOne,
@@ -33,35 +36,18 @@ var PromptContainer = React.createClass({
                 }
             })
         } else {
-            this.context.router.push('/playerTwo/' + this.state.username)
+            this.context.router.push('/playerTwo/' + this.state.username) // ทำการ router ไปยัง path /playerTwo
         }
     },
 
     render: function () {
         //console.log(this.props);
         return (
-            <div className="jumbotron col-sm-6 col-sm-offset-3 text-center" style={styles.transparentBg}>
-                <h1>{this.props.route.header}</h1>
-                <div className="col-sm-12">
-                    <form onSubmit={this.onSubmitUser}>
-                        <div className="form-group">
-                            <input
-                                className='form-control'
-                                placeholder='Github Username'
-                                onChange={this.onUpdateUser}
-                                defaultValue={this.state.username}
-                                type='text' />
-                        </div>
-                        <div className="form-group col-sm-4 col-sm-offset-4">
-                            <button
-                                className="btn btn-block btn-success"
-                                type="submit">
-                                Continue
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <Prompt
+                onSubmitUser={this.handleSubmitUser}
+                onUpdateUser={this.handleUpdateUser}
+                header={this.props.route.header}
+                username={this.state.username} /> // Refactoring แยกโค้ดส่วน UI ไปไว้ที่ components ชื่อ Prompt.js โดยจะส่ง Func และ ตัวแปรไปด้วย
         )
     }
 });
